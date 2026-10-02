@@ -442,15 +442,58 @@
     </main>
 
     <script>
-        const form = document.getElementById("votingForm");
-        const submitBtn = document.getElementById("submitBtn");
+    const form = document.getElementById("votingForm");
+    const submitBtn = document.getElementById("submitBtn");
 
-        // Allow the form to submit to the Express /submit route.
-        // The server will show the success page after saving the data.
-        form.addEventListener("submit", function () {
+    const submissionKey = "electionSurveySubmitted";
+
+    // Check whether this browser has already submitted
+    if (localStorage.getItem(submissionKey) === "true") {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Already Submitted";
+
+        const message = document.createElement("p");
+        message.textContent =
+            "You have already submitted this form from this browser.";
+        message.style.color = "#fef3c7";
+        message.style.textAlign = "center";
+        message.style.marginTop = "15px";
+
+        form.appendChild(message);
+
+        // Prevent further form submissions
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+        });
+    } else {
+        form.addEventListener("submit", function (event) {
+            if (!form.reportValidity()) {
+                event.preventDefault();
+                return;
+            }
+
+            // Prevent a second click or submission
+            if (localStorage.getItem(submissionKey) === "true") {
+                event.preventDefault();
+                return;
+            }
+
+            localStorage.setItem(submissionKey, "true");
+
             submitBtn.textContent = "Submitting...";
             submitBtn.disabled = true;
         });
-    </script>
+    }
+
+    // Prevent the Reset button from enabling repeat submission.
+    form.addEventListener("reset", function () {
+        if (localStorage.getItem(submissionKey) === "true") {
+            setTimeout(() => {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Already Submitted";
+            }, 0);
+        }
+    });
+</script>
 </body>
 </html>
