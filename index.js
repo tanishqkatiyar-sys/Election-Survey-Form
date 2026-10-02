@@ -5,9 +5,12 @@ import {MongoClient} from "mongodb"
 
 const app=express()
 app.use(express.urlencoded({extended:true}))
+app.use(express.static("public"));
+
+const PORT = process.env.PORT || 3000;
 
 const dbName='Election_Survey'
-const url="mongodb://127.0.0.1:27017"
+const url=process.env.MONGODB_URI;
 const client=new MongoClient(url)
 
 
@@ -25,4 +28,4 @@ app.post('/submit',async(req,resp)=>{
     resp.sendFile(absPath)
 })
 
-app.listen(3000)
+app.listen(PORT)
