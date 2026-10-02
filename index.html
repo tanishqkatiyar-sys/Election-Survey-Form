@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Election 2027 - Voting Preference Form</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #fff;
+            background:
+                radial-gradient(circle at 10% 20%, #2563eb 0, transparent 35%),
+                radial-gradient(circle at 90% 80%, #9333ea 0, transparent 35%),
+                linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+            background-attachment: fixed;
+        }
+
+        .container {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            width: 100%;
+            max-width: 650px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: -135px;
+            right: -90px;
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            background: rgba(147, 197, 253, 0.12);
+            pointer-events: none;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+            font-size: 38px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+            background: linear-gradient(90deg, #fff, #bfdbfe);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h3 {
+            color: #cbd5e1;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .notice {
+            margin-bottom: 25px;
+            padding: 13px 15px;
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            border-radius: 12px;
+            background: rgba(251, 191, 36, 0.12);
+            color: #fef3c7;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 23px;
+        }
+
+        .section-title {
+            display: block;
+            margin-bottom: 10px;
+            color: #f8fafc;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .optional {
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .field input {
+            width: 100%;
+            min-height: 51px;
+            padding: 14px 16px;
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.09);
+            color: #fff;
+            font-size: 15px;
+            transition: 0.3s ease;
+        }
+
+        .field input::placeholder {
+            color: #cbd5e1;
+        }
+
+        .field input:focus {
+            border-color: #93c5fd;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+        }
+
+        .party-heading {
+            margin: 5px 0 15px;
+        }
+
+        .party-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
+        }
+
+        .party-card {
+            position: relative;
+            min-width: 0;
+            min-height: 95px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.07);
+            transition: transform 0.25s ease,
+                        background 0.25s ease,
+                        border-color 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        .party-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .party-card:has(input:checked) {
+            border: 2px solid #93c5fd;
+            background: rgba(96, 165, 250, 0.2);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.2);
+        }
+
+        .party-card:focus-within {
+            outline: 2px solid #bfdbfe;
+            outline-offset: 3px;
+        }
+
+        .party-card input[type="radio"] {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 17px;
+            height: 17px;
+            accent-color: #60a5fa;
+            cursor: pointer;
+        }
+
+        .party-symbol {
+            flex-shrink: 0;
+            width: 53px;
+            height: 53px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.13);
+            font-size: 30px;
+        }
+
+        .party-name {
+            padding-right: 8px;
+            color: #f8fafc;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .party-short {
+            display: block;
+            margin-top: 3px;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        #submitBtn {
+            color: #fff;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            box-shadow: 0 7px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        #submitBtn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
+        }
+
+        #resetBtn {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+        }
+
+        #resetBtn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #bfdbfe;
+            outline-offset: 3px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 17px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            font-size: 12px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 23px 17px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .party-list {
+                grid-template-columns: 1fr;
+            }
+
+            .party-card {
+                min-height: 80px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <header class="header">
+            <div class="header-icon">🗳️</div>
+            <h1>UP Election 2027</h1>
+            <h3>Voting Preference Form</h3>
+        </header>
+
+        <div class="notice">
+            <strong>Note:</strong> This is a non-official demonstration
+            form for collecting voting preferences. It is not an
+            official election ballot.
+        </div>
+
+        <form action="/submit" id="votingForm" method="post">
+            <div class="field">
+                <label class="section-title" for="voteCity">
+                    📍 Vote City *
+                </label>
+                <input
+                    type="text"
+                    id="voteCity"
+                    name="voteCity"
+                    placeholder="Enter your vote city"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label class="section-title" for="voteTown">
+                    🏘️ Vote Town
+                    <span class="optional">(Optional)</span>
+                </label>
+                <input
+                    type="text"
+                    id="voteTown"
+                    name="voteTown"
+                    placeholder="Enter your vote town"
+                >
+            </div>
+
+            <div class="party-heading">
+                <span class="section-title">Select Political Party *</span>
+            </div>
+
+            <div class="party-list">
+                <label class="party-card" for="bjp">
+                    <input type="radio" id="bjp" name="vote"
+                           value="BJP" required>
+                    <span class="party-symbol">🪷</span>
+                    <span class="party-name">
+                        Bharatiya Janata Party
+                        <span class="party-short">BJP</span>
+                    </span>
+                </label>
+
+                <label class="party-card" for="sp">
+                    <input type="radio" id="sp" name="vote"
+                           value="SP">
+                    <span class="party-symbol">🚲</span>
+                    <span class="party-name">
+                        Samajwadi Party
+                        <span class="party-short">SP</span>
+                    </span>
+                </label>
+
+                <label class="party-card" for="congress">
+                    <input type="radio" id="congress" name="vote"
+                           value="Congress">
+                    <span class="party-symbol">✋</span>
+                    <span class="party-name">
+                        Indian National Congress
+                        <span class="party-short">INC</span>
+                    </span>
+                </label>
+
+                <label class="party-card" for="apnaDal">
+                    <input type="radio" id="apnaDal" name="vote"
+                           value="Apna Dal">
+                    <span class="party-symbol">☕</span>
+                    <span class="party-name">
+                        Apna Dal (Sonelal)
+                        <span class="party-short">Apna Dal</span>
+                    </span>
+                </label>
+
+                <label class="party-card" for="bsp">
+                    <input type="radio" id="bsp" name="vote"
+                           value="BSP">
+                    <span class="party-symbol">🐘</span>
+                    <span class="party-name">
+                        Bahujan Samaj Party
+                        <span class="party-short">BSP</span>
+                    </span>
+                </label>
+
+                <label class="party-card" for="others">
+                    <input type="radio" id="others" name="vote"
+                           value="Others">
+                    <span class="party-symbol">🗳️</span>
+                    <span class="party-name">
+                        Others
+                        <span class="party-short">Other options</span>
+                    </span>
+                </label>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" id="submitBtn">
+                    Submit Preference
+                </button>
+
+                <button type="reset" id="resetBtn">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+        <footer class="footer">
+            No name, phone number, email or voter ID is requested.
+            <br>
+            Demonstration only. This form does not cast an official vote.
+        </footer>
+    </main>
+
+    <script>
+        const form = document.getElementById("votingForm");
+        const submitBtn = document.getElementById("submitBtn");
+
+        // Allow the form to submit to the Express /submit route.
+        // The server will show the success page after saving the data.
+        form.addEventListener("submit", function () {
+            submitBtn.textContent = "Submitting...";
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

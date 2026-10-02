@@ -1,0 +1,24 @@
+{
+  "name": "up-election-2027",
+  "version": "1.0.0",
+  "description": "A survey form",
+  "main": "index.js",
+   "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanishqkatiyar-sys/Election-Survey-Form.git"
+  },
+  "author": "Tanishq Katiyar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanishqkatiyar-sys/Election-Survey-Form/issues"
+  },
+  "homepage": "https://github.com/tanishqkatiyar-sys/Election-Survey-Form#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongo": "^0.1.0"
+  }
+}
